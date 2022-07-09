@@ -1,6 +1,8 @@
 package com.shopme.common.entity;
 
 import javax.persistence.*;
+import java.net.UnknownHostException;
+import java.util.Base64;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,8 +33,8 @@ public class User {
 
     @ManyToMany
     @JoinTable(name = "users_roles",
-    joinColumns = @JoinColumn(name = "user_id"),
-    inverseJoinColumns = @JoinColumn(name = "role_id"))
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
     public User() {
@@ -109,8 +111,8 @@ public class User {
         this.roles = roles;
     }
 
-    public void addRole(Role role){
-       this.roles.add(role);
+    public void addRole(Role role) {
+        this.roles.add(role);
     }
 
     @Override
@@ -122,5 +124,11 @@ public class User {
                 ", lastName='" + lastName + '\'' +
                 ", roles=" + roles +
                 '}';
+    }
+
+    @Transient
+    public String getPhotosImagePath() {
+        if (id == null || photos == null) return "/images/default-image.png";
+        return "/user-photos/" + this.id + "/" + this.photos;
     }
 }
